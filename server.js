@@ -17,7 +17,8 @@ mongoose.connect("mongodb://shamilkan313_db_user:Shamil313@ac-7deetth-shard-00-0
 
 // ================= SCHEMA =================
 const TaskSchema = new mongoose.Schema({
-  title: String
+  title: String,
+  userId: String   // ✅ ADD THIS
 });
 
 const Task = mongoose.model("Task", TaskSchema);
@@ -31,14 +32,17 @@ app.get("/", (req, res) => {
 
 // CREATE
 app.post("/tasks", async (req, res) => {
-  const task = new Task({ title: req.body.title });
+  const task = new Task({
+  title: req.body.title,
+  userId: req.body.userId   
+});
   await task.save();
   res.json(task);
 });
 
 // READ
 app.get("/tasks", async (req, res) => {
-  const tasks = await Task.find();
+  const tasks = await Task.find({ userId: req.query.userId });
   res.json(tasks);
 });
 
